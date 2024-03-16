@@ -67,10 +67,10 @@ for epoch in range(epochs):
         running_loss += loss.item()
 
         real = sum(y.argmax(dim=1)==label).item()
-        TP += real
-        TN += 40*32+real
-        FN += 32-real
-        FP += 32-real
+        TP += ((predicted == real) & (real == 1)).sum().item()
+        TN += ((predicted == real) & (real == 0)).sum().item()
+        FN += ((predicted != real) & (real == 1)).sum().item()
+        FP += ((predicted != real) & (real == 0)).sum().item()
 
     accuracy_per_epoch.append((TP+TN)/(TP+TN+FP+FN))
     running_loss_per_epoch.append(running_loss/32/len(train_loader))
@@ -94,20 +94,18 @@ for epoch in range(epochs):
             loss = criterion(y, label)
             val_loss += loss.item()
             real = sum(y.argmax(dim=1)==label).to('cpu').item()
-            TP += real
-            TN += 40*32+real
-            FN += 32-real
-            FP += 32-real
+            TP += ((predicted == real) & (real == 1)).sum().item()
+            TN += ((predicted == real) & (real == 0)).sum().item()
+            FN += ((predicted != real) & (real == 1)).sum().item()
+            FP += ((predicted != real) & (real == 0)).sum().item()
             _, predicted = torch.max(y,1)
             total += label.size(0)
             correct += (predicted == label).sum().item()
-
-    validation_loss_per_epoch.append(running_loss/32/len(validate_loader))
+            
     validation_accuracy.append((TP+TN)/(TP+TN+FP+FN))
     validation_recall.append(TP/(TP+FN))
     validation_precision.append(TP/(TP+FP))
     print(f'Epoch {epoch+1}/{epochs}, Precision: {TP/(TP+FP)}, Train Loss: {running_loss/len(train_loader)}, Train Accuracy: {accuracy_per_epoch}, Val Loss: {val_loss/len(validate_loader)}, Val Accuracy: {100*correct/total}%')
-
 
 
 
