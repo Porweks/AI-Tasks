@@ -10,8 +10,8 @@ class Net(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(3, 32, kernel_size=(3,3))
-        self.pool1 = nn.MaxPool2d(3, 3)
         self.bn1 = nn.BatchNorm2d(32)
+        self.pool1 = nn.MaxPool2d(3, 3)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=(3,3))
         self.bn2 = nn.BatchNorm2d(64)
         self.pool2 = nn.MaxPool2d(2, 2)
