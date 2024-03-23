@@ -10,14 +10,20 @@ class Net(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(3, 32, kernel_size=(3,3))
+        self.bn1 = nn.BatchNorm2d(32)
+        self.pool1 = nn.MaxPool2d(3, 3)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=(3,3))
-        self.fc1 = nn.Linear(64*124*124, 128)
+        self.bn2 = nn.BatchNorm2d(64)
+        self.pool2 = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(64*20*20, 128)
         self.fc2 = nn.Linear(128, 42)
 
     def forward(self, x):
         x = nn.functional.relu(self.conv1(x))
+        x = self.pool1(x)
         x = nn.functional.relu(self.conv2(x))
-        x = x.view(-1, 64 * 124 * 124)
+        x = self.pool2(x)
+        x = x.view(-1, 64 * 20 * 20)
         x = nn.functional.relu (self.fc1(x))
         x = self.fc2(x)
         return x
