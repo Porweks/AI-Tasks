@@ -30,7 +30,7 @@ class Net(nn.Module):
 
 
 
-transform = transforms.Compose([transforms.Resize((128, 128)), transforms.ToTensor()])
+transform = transforms.Compose([transforms.Resize((128, 128)), transforms.RandomHorizontalFlip(), transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2), transforms.ToTensor()])
 data_set =  datasets.ImageFolder("simpsons_dataset", transform=transform)
 
 valid_count = int(len(data_set)*0.2)
