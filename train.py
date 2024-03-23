@@ -65,7 +65,7 @@ for epoch in range(epochs):
     precision_per_batch = []
     val_accuracy_per_batch = []
 
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.02/(epoch+1), momentum=0.8,weight_decay=1e-03)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.02/(epoch+1), momentum=0.4,weight_decay=1e-03)
     running_loss = 0.0
     model.train()
     TP = 0
